@@ -1,26 +1,37 @@
 package com.diabgnozscreennotesservice.entity;
 
+import java.time.LocalDateTime;
+
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "Note")
 public class NoteEntity {
 	
 	@Id
-	private Long noteId;
+	private ObjectId noteId;
 	
 	private Long patientId;
-	private String patientName;
+	private String patientLastName;
 	private String noteContent;
+	
+	@CreatedDate
+	private LocalDateTime createdDate;
+	
+	@LastModifiedDate
+	private LocalDateTime lastModifiedDate;
 	
 	public NoteEntity() {
 	}
 
-	public Long getNoteId() {
+	public ObjectId getNoteId() {
 		return noteId;
 	}
 
-	public void setNoteId(Long noteId) {
+	public void setNoteId(ObjectId noteId) {
 		this.noteId = noteId;
 	}
 
@@ -32,12 +43,12 @@ public class NoteEntity {
 		this.patientId = patientId;
 	}
 
-	public String getPatientName() {
-		return patientName;
+	public String getPatientLastName() {
+		return patientLastName;
 	}
 
-	public void setPatientName(String patientName) {
-		this.patientName = patientName;
+	public void setPatientLastName(String patientLastName) {
+		this.patientLastName = patientLastName;
 	}
 
 	public String getNoteContent() {
@@ -48,11 +59,27 @@ public class NoteEntity {
 		this.noteContent = noteContent;
 	}
 
+	public LocalDateTime getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public LocalDateTime getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+
+	public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
+
 	@Override
 	public String toString() {
-		return "NoteEntity [noteId=" + noteId + ", patientId=" + patientId + ", patientName=" + patientName
-				+ ", noteContent=" + noteContent + "]";
+		return "NoteEntity [noteId=" + noteId + ", patientId=" + patientId + ", patientLastName=" + patientLastName
+				+ ", noteContent=" + noteContent + ", createdDate=" + createdDate + ", lastModifiedDate="
+				+ lastModifiedDate + "]";
 	}
-	
-	
+
 }

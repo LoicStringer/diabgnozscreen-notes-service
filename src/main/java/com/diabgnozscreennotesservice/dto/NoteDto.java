@@ -1,23 +1,28 @@
 package com.diabgnozscreennotesservice.dto;
 
+import java.time.LocalDateTime;
+
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 
 @Component
 public class NoteDto {
 
-	private Long noteId;
+	private ObjectId noteId;
 	private Long patientId;
-	private String patientName;
+	private String patientLastName;
 	private String noteContent;
+	private LocalDateTime createdDate;
+	private LocalDateTime lastModifiedDate;
 	
 	public NoteDto() {
 	}
 
-	public Long getNoteId() {
+	public ObjectId getNoteId() {
 		return noteId;
 	}
 
-	public void setNoteId(Long noteId) {
+	public void setNoteId(ObjectId noteId) {
 		this.noteId = noteId;
 	}
 
@@ -29,12 +34,12 @@ public class NoteDto {
 		this.patientId = patientId;
 	}
 
-	public String getPatientName() {
-		return patientName;
+	public String getPatientLastName() {
+		return patientLastName;
 	}
 
-	public void setPatientName(String patientName) {
-		this.patientName = patientName;
+	public void setPatientLastName(String patientLastName) {
+		this.patientLastName = patientLastName;
 	}
 
 	public String getNoteContent() {
@@ -45,12 +50,27 @@ public class NoteDto {
 		this.noteContent = noteContent;
 	}
 
+	public LocalDateTime getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public LocalDateTime getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+
+	public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
+
 	@Override
 	public String toString() {
-		return "NoteDto [noteId=" + noteId + ", patientId=" + patientId + ", patientName=" + patientName
-				+ ", noteContent=" + noteContent + "]";
+		return "NoteDto [noteId=" + noteId + ", patientId=" + patientId + ", patientLastName=" + patientLastName
+				+ ", noteContent=" + noteContent + ", createdDate=" + createdDate + ", lastModifiedDate="
+				+ lastModifiedDate + "]";
 	}
-	
-	
-	
+
 }
