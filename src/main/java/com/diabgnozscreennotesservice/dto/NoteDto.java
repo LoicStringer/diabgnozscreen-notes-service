@@ -1,28 +1,27 @@
 package com.diabgnozscreennotesservice.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 
 @Component
 public class NoteDto {
 
-	private ObjectId noteId;
+	private String noteId;
 	private Long patientId;
 	private String patientLastName;
 	private String noteContent;
-	private LocalDateTime createdDate;
-	private LocalDateTime lastModifiedDate;
+	private Instant createdDate;
+	private Instant lastModifiedDate;
 	
 	public NoteDto() {
 	}
 
-	public ObjectId getNoteId() {
+	public String getNoteId() {
 		return noteId;
 	}
 
-	public void setNoteId(ObjectId noteId) {
+	public void setNoteId(String noteId) {
 		this.noteId = noteId;
 	}
 
@@ -50,19 +49,19 @@ public class NoteDto {
 		this.noteContent = noteContent;
 	}
 
-	public LocalDateTime getCreatedDate() {
+	public Instant getCreatedDate() {
 		return createdDate;
 	}
 
-	public void setCreatedDate(LocalDateTime createdDate) {
+	public void setCreatedDate(Instant createdDate) {
 		this.createdDate = createdDate;
 	}
 
-	public LocalDateTime getLastModifiedDate() {
+	public Instant getLastModifiedDate() {
 		return lastModifiedDate;
 	}
 
-	public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+	public void setLastModifiedDate(Instant lastModifiedDate) {
 		this.lastModifiedDate = lastModifiedDate;
 	}
 

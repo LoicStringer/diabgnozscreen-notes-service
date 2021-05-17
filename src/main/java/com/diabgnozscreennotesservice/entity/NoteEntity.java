@@ -1,8 +1,7 @@
 package com.diabgnozscreennotesservice.entity;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -12,26 +11,26 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class NoteEntity {
 	
 	@Id
-	private ObjectId noteId;
+	private String noteId;
 	
 	private Long patientId;
 	private String patientLastName;
 	private String noteContent;
 	
 	@CreatedDate
-	private LocalDateTime createdDate;
+	private Instant createdDate;
 	
 	@LastModifiedDate
-	private LocalDateTime lastModifiedDate;
+	private Instant lastModifiedDate;
 	
 	public NoteEntity() {
 	}
 
-	public ObjectId getNoteId() {
+	public String getNoteId() {
 		return noteId;
 	}
 
-	public void setNoteId(ObjectId noteId) {
+	public void setNoteId(String noteId) {
 		this.noteId = noteId;
 	}
 
@@ -59,19 +58,19 @@ public class NoteEntity {
 		this.noteContent = noteContent;
 	}
 
-	public LocalDateTime getCreatedDate() {
+	public Instant getCreatedDate() {
 		return createdDate;
 	}
 
-	public void setCreatedDate(LocalDateTime createdDate) {
+	public void setCreatedDate(Instant createdDate) {
 		this.createdDate = createdDate;
 	}
 
-	public LocalDateTime getLastModifiedDate() {
+	public Instant getLastModifiedDate() {
 		return lastModifiedDate;
 	}
 
-	public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+	public void setLastModifiedDate(Instant lastModifiedDate) {
 		this.lastModifiedDate = lastModifiedDate;
 	}
 
