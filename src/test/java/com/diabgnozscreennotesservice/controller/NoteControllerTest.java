@@ -24,7 +24,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 import com.diabgnozscreennotesservice.dto.NoteDto;
+import com.diabgnozscreennotesservice.exception.NoteIdSettingNotAllowedException;
 import com.diabgnozscreennotesservice.exception.NoteNotFoundException;
+import com.diabgnozscreennotesservice.exception.PatientIdMismatchException;
 import com.diabgnozscreennotesservice.exception.UnknownPatientIdException;
 import com.diabgnozscreennotesservice.mapper.NoteMapper;
 import com.diabgnozscreennotesservice.model.Note;
@@ -78,7 +80,7 @@ class NoteControllerTest {
 		}
 
 		@Test
-		void addNoteTest() {
+		void addNoteTest() throws NoteIdSettingNotAllowedException {
 			when(noteMapper.noteDtoToNote(testedNoteDto)).thenReturn(testedNote);
 			when(noteService.saveNote(testedNote)).thenReturn(testedNote);
 			when(noteMapper.noteToNoteDto(testedNote)).thenReturn(testedNoteDto);
@@ -86,11 +88,11 @@ class NoteControllerTest {
 		}
 
 		@Test
-		void updateNoteTest() {
+		void updateNoteTest() throws NoteNotFoundException, PatientIdMismatchException {
 			when(noteMapper.noteDtoToNote(testedNoteDto)).thenReturn(testedNote);
-			when(noteService.saveNote(testedNote)).thenReturn(testedNote);
+			when(noteService.updateNote(testedNote)).thenReturn(testedNote);
 			when(noteMapper.noteToNoteDto(testedNote)).thenReturn(testedNoteDto);
-			assertEquals(ResponseEntity.ok(testedNoteDto), noteController.addNote(testedNoteDto));
+			assertEquals(ResponseEntity.ok(testedNoteDto), noteController.updateNote(testedNoteDto));
 		}
 
 	}
@@ -107,12 +109,25 @@ class NoteControllerTest {
 		}
 		
 		@Test
-		void isExpectedExceptionThrownWhenNoteNotFoundTest() throws NoteNotFoundException {
+		void isExpectedExceptionThrownWhenNoteNotFoundTest() throws NoteNotFoundException, PatientIdMismatchException {
 			when(noteMapper.noteDtoToNote(testedNoteDto)).thenReturn(testedNote);
 			when(noteService.updateNote(testedNote)).thenThrow(NoteNotFoundException.class);
 			assertThrows(NoteNotFoundException.class,()-> noteController.updateNote(testedNoteDto));
 		}
 		
+		@Test
+		void isExpectedExceptionThrownWhenSettingIdBeforeSaveTest() throws NoteIdSettingNotAllowedException {
+			when(noteMapper.noteDtoToNote(testedNoteDto)).thenReturn(testedNote);
+			when(noteService.saveNote(testedNote)).thenThrow(NoteIdSettingNotAllowedException.class);
+			assertThrows(NoteIdSettingNotAllowedException.class,()-> noteController.addNote(testedNoteDto));
+		}	
+		
+		@Test
+		void isExpectedExceptionThrownWhenPatientIdTest() throws NoteNotFoundException, PatientIdMismatchException {
+			when(noteMapper.noteDtoToNote(testedNoteDto)).thenReturn(testedNote);
+			when(noteService.updateNote(testedNote)).thenThrow(PatientIdMismatchException.class);
+			assertThrows(PatientIdMismatchException.class,()-> noteController.updateNote(testedNoteDto));
+		}
 	}
 
 	private static void initTestDtoBeans() {

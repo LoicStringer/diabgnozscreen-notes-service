@@ -53,17 +53,14 @@ tasks.withType(JavaCompile) {
     ]
 }
 
-
 jib {
 	from {
-		image = 'openjdk:14-alpine'	
+		image = 'openjdk:14-alpine'
+		credHelper = 'pass'	
 	}
 	to {
-		image = 'golowik/diabgnozscreen-notes-service-image'
-		auth {
-			username = 'golowik'
-			password = 'Morgane190813*'
-		}
+		image = 'loicstringer/diabgnozscreen-notes-service-image'
+		credHelper = 'pass'
 	}
 	container {
 		ports = ['8082']

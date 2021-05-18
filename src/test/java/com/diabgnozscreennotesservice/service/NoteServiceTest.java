@@ -23,7 +23,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import com.diabgnozscreennotesservice.dao.NoteDao;
+import com.diabgnozscreennotesservice.exception.NoteIdSettingNotAllowedException;
 import com.diabgnozscreennotesservice.exception.NoteNotFoundException;
+import com.diabgnozscreennotesservice.exception.PatientIdMismatchException;
 import com.diabgnozscreennotesservice.exception.UnknownPatientIdException;
 import com.diabgnozscreennotesservice.model.Note;
 
@@ -66,13 +68,13 @@ class NoteServiceTest {
 		}
 
 		@Test
-		void saveNoteTest() {
+		void saveNoteTest() throws NoteIdSettingNotAllowedException {
 			when(noteDao.saveNote(testedNote)).thenReturn(testedNote);
 			assertEquals(1L, noteService.saveNote(testedNote).getPatientId());
 		}
 
 		@Test
-		void updateNoteTest() throws NoteNotFoundException {
+		void updateNoteTest() throws NoteNotFoundException, PatientIdMismatchException {
 			when(noteDao.updateNote(testedNote)).thenReturn(testedNote);
 			assertEquals(1L, noteService.updateNote(testedNote).getPatientId());
 		}
@@ -90,10 +92,23 @@ class NoteServiceTest {
 		}
 		
 		@Test
-		void isExpectedExceptionThrownWhenNoteNotFounException() throws NoteNotFoundException {
+		void isExpectedExceptionThrownWhenNoteNotFoundTest() throws NoteNotFoundException, PatientIdMismatchException {
 			when(noteDao.updateNote(testedNote)).thenThrow(NoteNotFoundException.class);
 			assertThrows(NoteNotFoundException.class, ()->noteService.updateNote(testedNote));
 		}
+		
+		@Test
+		void isExpectedExceptionThrownWhenSettingAnIdBeforeSaveTest() throws NoteIdSettingNotAllowedException {
+			when(noteDao.saveNote(testedNote)).thenThrow(NoteIdSettingNotAllowedException.class);
+			assertThrows(NoteIdSettingNotAllowedException.class, ()->noteService.saveNote(testedNote));
+		}
+		
+		@Test
+		void isExpectedExceptionThrownWhenPatientIdMismatchBeforeUpdateTest() throws NoteNotFoundException, PatientIdMismatchException {
+			when(noteDao.updateNote(testedNote)).thenThrow(PatientIdMismatchException.class);
+			assertThrows(PatientIdMismatchException.class, ()->noteService.updateNote(testedNote));
+		}
+		
 	}
 	
 	private static void setUpTestBeans() {

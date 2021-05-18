@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.diabgnozscreennotesservice.dto.NoteDto;
+import com.diabgnozscreennotesservice.exception.NoteIdSettingNotAllowedException;
 import com.diabgnozscreennotesservice.exception.NoteNotFoundException;
+import com.diabgnozscreennotesservice.exception.PatientIdMismatchException;
 import com.diabgnozscreennotesservice.exception.UnknownPatientIdException;
 import com.diabgnozscreennotesservice.mapper.NoteMapper;
 import com.diabgnozscreennotesservice.model.Note;
@@ -39,13 +41,13 @@ public class NoteController {
 	}
 
 	@PostMapping("")
-	public ResponseEntity<NoteDto> addNote (@RequestBody NoteDto noteDtoToSave){
+	public ResponseEntity<NoteDto> addNote (@RequestBody NoteDto noteDtoToSave) throws NoteIdSettingNotAllowedException{
 		Note savedNote = noteService.saveNote(noteMapper.noteDtoToNote(noteDtoToSave));
 		return ResponseEntity.ok(noteMapper.noteToNoteDto(savedNote));
 	}
 	
 	@PutMapping("")
-	public ResponseEntity<NoteDto> updateNote (@RequestBody NoteDto noteDtoToUpdate) throws NoteNotFoundException{
+	public ResponseEntity<NoteDto> updateNote (@RequestBody NoteDto noteDtoToUpdate) throws NoteNotFoundException, PatientIdMismatchException{
 		Note updatedNote = noteService.updateNote(noteMapper.noteDtoToNote(noteDtoToUpdate));
 		return ResponseEntity.ok(noteMapper.noteToNoteDto(updatedNote));
 	}
