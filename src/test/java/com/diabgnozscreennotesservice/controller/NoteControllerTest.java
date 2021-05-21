@@ -78,7 +78,7 @@ class NoteControllerTest {
 			when(noteMapper.noteToNoteDto(testedNoteTwo)).thenReturn(testedNoteDtoTwo);
 			assertEquals(ResponseEntity.ok(testedNoteDtosPage), noteController.getPatientHistory(1L, testedPageable));
 		}
-
+		
 		@Test
 		void addNoteTest() throws NoteIdSettingNotAllowedException {
 			when(noteMapper.noteDtoToNote(testedNoteDto)).thenReturn(testedNote);

@@ -1,10 +1,13 @@
 package com.diabgnozscreennotesservice.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import com.diabgnozscreennotesservice.dto.NoteDto;
 import com.diabgnozscreennotesservice.entity.NoteEntity;
 import com.diabgnozscreennotesservice.exception.NoteIdSettingNotAllowedException;
 import com.diabgnozscreennotesservice.exception.NoteNotFoundException;
@@ -28,6 +31,11 @@ public class NoteDao {
 		Page<NoteEntity> patientHistoryEntity = noteRepository.findByPatientId(patientId, pageable);
 		Page<Note> patientHistory = patientHistoryEntity.map(n -> noteMapper.noteEntityToNote(n));
 		return patientHistory;
+	}
+	
+	public List<Note> getPatientHistoryAsNotesList(Long patientId) {
+		return noteMapper.noteEntitiesListToNotesList(noteRepository.findByPatientId(patientId));
+
 	}
 
 	public Note saveNote(Note noteToSave) throws NoteIdSettingNotAllowedException {
@@ -73,4 +81,6 @@ public class NoteDao {
 		if (!expectedPatientId.equals(noteToCheck.getPatientId()))
 			throw new PatientIdMismatchException();
 	}
+
+	
 }

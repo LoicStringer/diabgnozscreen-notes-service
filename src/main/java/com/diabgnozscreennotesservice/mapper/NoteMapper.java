@@ -18,5 +18,5 @@ public interface NoteMapper {
 	Note noteDtoToNote (NoteDto noteDto);
 	
 	List<NoteDto> notesListToNoteDtosList (List<Note> notesList);
-	List<Note> noteDtosListToNotesList (List<NoteDto> noteDtosList);
+	List<Note> noteEntitiesListToNotesList (List<NoteEntity> noteEntitiesList);
 }

@@ -66,6 +66,12 @@ class NoteServiceTest {
 			when(noteDao.getPatientHistory(1L, testedPageable)).thenReturn(testedNotesPage);
 			assertEquals(testedNotesPage, noteService.getPatientHistory(1L, testedPageable));
 		}
+		
+		@Test
+		void getPatientHistoryAsListTest() {
+			when(noteDao.getPatientHistoryAsNotesList(1L)).thenReturn(testedNotesList);
+			assertEquals(testedNotesList, noteService.getPatientHistoryAsNotesList(1L));
+		}
 
 		@Test
 		void saveNoteTest() throws NoteIdSettingNotAllowedException {
