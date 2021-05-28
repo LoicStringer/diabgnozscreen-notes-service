@@ -29,13 +29,6 @@ public class ExceptionsHandlerCenter {
 		return new ResponseEntity<ExceptionResponse>(exceptionResponse, getHttpStatusFromException(ex));
 	}
 	
-	@ExceptionHandler(UnknownPatientIdException.class)
-	public ResponseEntity<ExceptionResponse> handlePatientNotFoundException(UnknownPatientIdException ex) {
-		log.error("UnknownPatientIdException raised in DAO layer: "+ex);
-		ExceptionResponse exceptionResponse = exceptionResponseBuild(ex);
-		return new ResponseEntity<ExceptionResponse>(exceptionResponse, getHttpStatusFromException(ex));
-	}
-	
 	@ExceptionHandler(NoteIdSettingNotAllowedException.class)
 	public ResponseEntity<ExceptionResponse> handleNoteIdSettingNotAllowedException(NoteIdSettingNotAllowedException ex) {
 		log.error("NoteIdSettingNotAllowedException raised in DAO layer (create method): "+ex);

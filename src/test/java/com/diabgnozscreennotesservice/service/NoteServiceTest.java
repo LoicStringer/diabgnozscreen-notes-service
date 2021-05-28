@@ -2,7 +2,6 @@ package com.diabgnozscreennotesservice.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -26,9 +25,7 @@ import com.diabgnozscreennotesservice.dao.NoteDao;
 import com.diabgnozscreennotesservice.exception.NoteIdSettingNotAllowedException;
 import com.diabgnozscreennotesservice.exception.NoteNotFoundException;
 import com.diabgnozscreennotesservice.exception.PatientIdMismatchException;
-import com.diabgnozscreennotesservice.exception.UnknownPatientIdException;
 import com.diabgnozscreennotesservice.model.Note;
-
 
 @DisplayName("NoteService unit tests")
 @ExtendWith(MockitoExtension.class)
@@ -62,11 +59,11 @@ class NoteServiceTest {
 	class NominalCasesTests {
 
 		@Test
-		void getPatientHistoryPageTest() throws UnknownPatientIdException {
+		void getPatientHistoryPageTest() {
 			when(noteDao.getPatientHistory(1L, testedPageable)).thenReturn(testedNotesPage);
 			assertEquals(testedNotesPage, noteService.getPatientHistory(1L, testedPageable));
 		}
-		
+
 		@Test
 		void getPatientHistoryAsListTest() {
 			when(noteDao.getPatientHistoryAsNotesList(1L)).thenReturn(testedNotesList);
@@ -85,38 +82,33 @@ class NoteServiceTest {
 			assertEquals(1L, noteService.updateNote(testedNote).getPatientId());
 		}
 	}
-	
+
 	@Nested
 	@Tag("ExceptionsTests")
 	@DisplayName("Exceptions Checking")
 	class ExceptionsTests {
 
 		@Test
-		void isExpectedExceptionThrownWhenPatientIdIsNotFoundTest() throws UnknownPatientIdException {
-			when(noteDao.getPatientHistory(any(Long.class), any(Pageable.class))).thenThrow(UnknownPatientIdException.class);
-			assertThrows(UnknownPatientIdException.class, ()->noteService.getPatientHistory(10L, testedPageable));
-		}
-		
-		@Test
 		void isExpectedExceptionThrownWhenNoteNotFoundTest() throws NoteNotFoundException, PatientIdMismatchException {
 			when(noteDao.updateNote(testedNote)).thenThrow(NoteNotFoundException.class);
-			assertThrows(NoteNotFoundException.class, ()->noteService.updateNote(testedNote));
+			assertThrows(NoteNotFoundException.class, () -> noteService.updateNote(testedNote));
 		}
-		
+
 		@Test
 		void isExpectedExceptionThrownWhenSettingAnIdBeforeSaveTest() throws NoteIdSettingNotAllowedException {
 			when(noteDao.saveNote(testedNote)).thenThrow(NoteIdSettingNotAllowedException.class);
-			assertThrows(NoteIdSettingNotAllowedException.class, ()->noteService.saveNote(testedNote));
+			assertThrows(NoteIdSettingNotAllowedException.class, () -> noteService.saveNote(testedNote));
 		}
-		
+
 		@Test
-		void isExpectedExceptionThrownWhenPatientIdMismatchBeforeUpdateTest() throws NoteNotFoundException, PatientIdMismatchException {
+		void isExpectedExceptionThrownWhenPatientIdMismatchBeforeUpdateTest()
+				throws NoteNotFoundException, PatientIdMismatchException {
 			when(noteDao.updateNote(testedNote)).thenThrow(PatientIdMismatchException.class);
-			assertThrows(PatientIdMismatchException.class, ()->noteService.updateNote(testedNote));
+			assertThrows(PatientIdMismatchException.class, () -> noteService.updateNote(testedNote));
 		}
-		
+
 	}
-	
+
 	private static void setUpTestBeans() {
 		testedNote.setPatientId(1L);
 		testedNoteTwo.setPatientId(1L);

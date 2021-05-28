@@ -8,11 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.diabgnozscreennotesservice.dao.NoteDao;
-import com.diabgnozscreennotesservice.dto.NoteDto;
 import com.diabgnozscreennotesservice.exception.NoteIdSettingNotAllowedException;
 import com.diabgnozscreennotesservice.exception.NoteNotFoundException;
 import com.diabgnozscreennotesservice.exception.PatientIdMismatchException;
-import com.diabgnozscreennotesservice.exception.UnknownPatientIdException;
 import com.diabgnozscreennotesservice.model.Note;
 
 @Service
@@ -22,7 +20,7 @@ public class NoteService {
 	private NoteDao noteDao;
 
 	
-	public Page<Note> getPatientHistory (Long patientId, Pageable pageable) throws UnknownPatientIdException{
+	public Page<Note> getPatientHistory (Long patientId, Pageable pageable) {
 		return noteDao.getPatientHistory(patientId,pageable);
 	}
 	

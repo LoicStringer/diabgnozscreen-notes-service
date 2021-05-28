@@ -21,7 +21,7 @@ class ReportOperationsTestIT {
 	
 	@Test
 	void getPatientHistoryForReportTest() throws Exception {
-		mockMvc.perform(get("/diabgnoz/report/4")).andExpect(status().isOk())
+		mockMvc.perform(get("/diabgnoz/report/patients/4")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.length()").value(4))
 				.andExpect(jsonPath("$.[0].patientLastName").value("TestEarlyOnset"));
 	}

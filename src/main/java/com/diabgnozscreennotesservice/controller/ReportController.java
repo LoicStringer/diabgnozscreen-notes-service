@@ -14,7 +14,7 @@ import com.diabgnozscreennotesservice.mapper.NoteMapper;
 import com.diabgnozscreennotesservice.service.NoteService;
 
 @RestController
-@RequestMapping("diabgnoz/report/")
+@RequestMapping("diabgnoz/report/patients")
 public class ReportController {
 	
 	@Autowired
