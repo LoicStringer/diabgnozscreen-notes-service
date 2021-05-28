@@ -7,12 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import com.diabgnozscreennotesservice.dto.NoteDto;
 import com.diabgnozscreennotesservice.entity.NoteEntity;
 import com.diabgnozscreennotesservice.exception.NoteIdSettingNotAllowedException;
 import com.diabgnozscreennotesservice.exception.NoteNotFoundException;
 import com.diabgnozscreennotesservice.exception.PatientIdMismatchException;
-import com.diabgnozscreennotesservice.exception.UnknownPatientIdException;
 import com.diabgnozscreennotesservice.mapper.NoteMapper;
 import com.diabgnozscreennotesservice.model.Note;
 import com.diabgnozscreennotesservice.repository.NoteRepository;
@@ -26,8 +24,7 @@ public class NoteDao {
 	@Autowired
 	private NoteMapper noteMapper;
 
-	public Page<Note> getPatientHistory(Long patientId, Pageable pageable) throws UnknownPatientIdException {
-		checkPatientId(patientId);
+	public Page<Note> getPatientHistory(Long patientId, Pageable pageable) {
 		Page<NoteEntity> patientHistoryEntity = noteRepository.findByPatientId(patientId, pageable);
 		Page<Note> patientHistory = patientHistoryEntity.map(n -> noteMapper.noteEntityToNote(n));
 		return patientHistory;
@@ -57,11 +54,6 @@ public class NoteDao {
 			throws NoteNotFoundException, PatientIdMismatchException{
 		checkNoteId(noteToCheck.getNoteId());
 		checkPatientIdMismatch(noteToCheck);
-	}
-
-	private void checkPatientId(Long patientId) throws UnknownPatientIdException {
-		if (noteRepository.findByPatientId(patientId).isEmpty())
-			throw new UnknownPatientIdException();
 	}
 
 	private boolean checkNoteId(String noteId) throws NoteNotFoundException {

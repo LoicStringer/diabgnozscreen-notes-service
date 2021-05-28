@@ -24,7 +24,7 @@ import com.diabgnozscreennotesservice.entity.NoteEntity;
 import com.diabgnozscreennotesservice.exception.NoteIdSettingNotAllowedException;
 import com.diabgnozscreennotesservice.exception.NoteNotFoundException;
 import com.diabgnozscreennotesservice.exception.PatientIdMismatchException;
-import com.diabgnozscreennotesservice.exception.UnknownPatientIdException;
+
 import com.diabgnozscreennotesservice.mapper.NoteMapper;
 import com.diabgnozscreennotesservice.repository.NoteRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -66,7 +66,7 @@ class NoteOperationsTestIT {
 			noteToAdd.setPatientId(5L);
 
 			mockMvc.perform(post("/diabgnoz/patient-history/").content(objectMapper.writeValueAsString(noteToAdd))
-					.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+					.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated())
 					.andExpect(jsonPath("$.patientId").value(5L));
 
 			assertEquals("Jordan", noteRepository.findByPatientId(5L).get(0).getPatientLastName());
@@ -99,12 +99,6 @@ class NoteOperationsTestIT {
 	@Tag("ExceptionsTests")
 	@DisplayName("Exceptions Checking")
 	class ExceptionsTests {
-
-		@Test
-		void isExpectedExceptionThrownWhenPatientIsNotFoundTest() throws Exception {
-			mockMvc.perform(get("/diabgnoz/patient-history/10")).andExpect(status().isNotFound()).andExpect(
-					result -> assertTrue(result.getResolvedException() instanceof UnknownPatientIdException));
-		}
 
 		@Test
 		void isExpectedExceptionThrownWhenNoteIsNotFoundTest() throws JsonProcessingException, Exception {

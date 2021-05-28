@@ -2,7 +2,6 @@ package com.diabgnozscreennotesservice.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -21,13 +20,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.diabgnozscreennotesservice.dto.NoteDto;
 import com.diabgnozscreennotesservice.exception.NoteIdSettingNotAllowedException;
 import com.diabgnozscreennotesservice.exception.NoteNotFoundException;
 import com.diabgnozscreennotesservice.exception.PatientIdMismatchException;
-import com.diabgnozscreennotesservice.exception.UnknownPatientIdException;
 import com.diabgnozscreennotesservice.mapper.NoteMapper;
 import com.diabgnozscreennotesservice.model.Note;
 import com.diabgnozscreennotesservice.service.NoteService;
@@ -72,7 +71,7 @@ class NoteControllerTest {
 	class NominalCasesTests {
 
 		@Test
-		void getPatientHistoryPageTest() throws UnknownPatientIdException {
+		void getPatientHistoryPageTest()  {
 			when(noteService.getPatientHistory(1L, testedPageable)).thenReturn(testedNotesPage);
 			when(noteMapper.noteToNoteDto(testedNote)).thenReturn(testedNoteDto);
 			when(noteMapper.noteToNoteDto(testedNoteTwo)).thenReturn(testedNoteDtoTwo);
@@ -84,7 +83,7 @@ class NoteControllerTest {
 			when(noteMapper.noteDtoToNote(testedNoteDto)).thenReturn(testedNote);
 			when(noteService.saveNote(testedNote)).thenReturn(testedNote);
 			when(noteMapper.noteToNoteDto(testedNote)).thenReturn(testedNoteDto);
-			assertEquals(ResponseEntity.ok(testedNoteDto), noteController.addNote(testedNoteDto));
+			assertEquals(new ResponseEntity<NoteDto>(testedNoteDto,HttpStatus.CREATED), noteController.addNote(testedNoteDto));
 		}
 
 		@Test
@@ -102,12 +101,6 @@ class NoteControllerTest {
 	@DisplayName("Exceptions Checking")
 	class ExceptionsTests {
 
-		@Test
-		void isExpectetdExceptionThrownWhenPatientIdNotRegisteredTest() throws UnknownPatientIdException {
-			when(noteService.getPatientHistory(any(Long.class), any(Pageable.class))).thenThrow(UnknownPatientIdException.class);
-			assertThrows(UnknownPatientIdException.class, ()->noteController.getPatientHistory(10L, testedPageable));
-		}
-		
 		@Test
 		void isExpectedExceptionThrownWhenNoteNotFoundTest() throws NoteNotFoundException, PatientIdMismatchException {
 			when(noteMapper.noteDtoToNote(testedNoteDto)).thenReturn(testedNote);

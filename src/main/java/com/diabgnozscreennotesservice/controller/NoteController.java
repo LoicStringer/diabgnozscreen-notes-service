@@ -3,6 +3,7 @@ package com.diabgnozscreennotesservice.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +18,7 @@ import com.diabgnozscreennotesservice.dto.NoteDto;
 import com.diabgnozscreennotesservice.exception.NoteIdSettingNotAllowedException;
 import com.diabgnozscreennotesservice.exception.NoteNotFoundException;
 import com.diabgnozscreennotesservice.exception.PatientIdMismatchException;
-import com.diabgnozscreennotesservice.exception.UnknownPatientIdException;
+
 import com.diabgnozscreennotesservice.mapper.NoteMapper;
 import com.diabgnozscreennotesservice.model.Note;
 import com.diabgnozscreennotesservice.service.NoteService;
@@ -34,7 +35,7 @@ public class NoteController {
 	private NoteMapper noteMapper;
 
 	@GetMapping("/{patientId}")
-	public ResponseEntity<Page<NoteDto>> getPatientHistory(@PathVariable Long patientId, Pageable pageable) throws UnknownPatientIdException {
+	public ResponseEntity<Page<NoteDto>> getPatientHistory(@PathVariable Long patientId, Pageable pageable) {
 		Page<Note> patientHistoryModel = noteService.getPatientHistory(patientId, pageable);
 		Page<NoteDto> patientHistory = patientHistoryModel.map(n -> noteMapper.noteToNoteDto(n));
 		return ResponseEntity.ok(patientHistory);
@@ -43,7 +44,7 @@ public class NoteController {
 	@PostMapping("")
 	public ResponseEntity<NoteDto> addNote (@RequestBody NoteDto noteDtoToSave) throws NoteIdSettingNotAllowedException{
 		Note savedNote = noteService.saveNote(noteMapper.noteDtoToNote(noteDtoToSave));
-		return ResponseEntity.ok(noteMapper.noteToNoteDto(savedNote));
+		return new ResponseEntity<NoteDto>(noteMapper.noteToNoteDto(savedNote),HttpStatus.CREATED);
 	}
 	
 	@PutMapping("")
